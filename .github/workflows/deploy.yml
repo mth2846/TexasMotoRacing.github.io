@@ -18,10 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: npm }
-      - run: npm ci
-      # A root site only happens when the repo is named exactly <owner>.github.io.
-      # Anything else is a project site served at /REPO, so assets need that prefix.
+        with: { node-version: 22 }
+      - run: npm install
       - run: |
           OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           REPO=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
