@@ -20,10 +20,17 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci
-      # For a project site (github.com/USER/REPO → USER.github.io/REPO) the base path is /REPO.
-      # For a user site (REPO named USER.github.io) leave it empty.
+      # A root site only happens when the repo is named exactly <owner>.github.io.
+      # Anything else is a project site served at /REPO, so assets need that prefix.
       - run: |
-          if [[ "${{ github.event.repository.name }}" == *.github.io ]]; then export NEXT_PUBLIC_BASE_PATH=""; else export NEXT_PUBLIC_BASE_PATH="/${{ github.event.repository.name }}"; fi
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          REPO=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
+          if [ "$REPO" = "$OWNER.github.io" ]; then
+            export NEXT_PUBLIC_BASE_PATH=""
+          else
+            export NEXT_PUBLIC_BASE_PATH="/${{ github.event.repository.name }}"
+          fi
+          echo "base path: '$NEXT_PUBLIC_BASE_PATH'"
           npm run build
       - uses: actions/upload-pages-artifact@v3
         with: { path: out }
