@@ -1,0 +1,31 @@
+import type { Metadata } from 'next';
+import './globals.css';
+import { site } from '@/data/site';
+
+export const metadata: Metadata = {
+  // TODO: set to your real URL once deployed — used for link previews.
+  metadataBase: new URL('https://texasmotoracing.github.io'),
+  title: site.name,
+  description: `${site.tagline}. Design it. Build it. Race it at MotorLand Aragón, Spain.`,
+  openGraph: {
+    title: site.name,
+    description: `${site.tagline}, competing in the MotoStudent International Competition.`,
+    images: ['/logos/crest-full.png'],
+    type: 'website',
+  },
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap"
+        />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
